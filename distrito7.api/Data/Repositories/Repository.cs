@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using distrito7.core.Interfaces;
 using distrito7.core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace distrito7.api.Data.Repositories
 {
     public class Repository : IRepository
     {
         private readonly DataContext _dataContext;
-        
+
         public Repository(DataContext dataContext)
         {
             _dataContext = dataContext;
-            
+
         }
-        
+
         public async Task AddMeasurement(AnthropometricMeasurements measurement)
         {
             _dataContext.AnthropometricMeasurements.Add(measurement);
@@ -59,79 +60,118 @@ namespace distrito7.api.Data.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public Task<List<AnthropometricMeasurements?>> GetAllMeasurements()
+        public async Task<List<AnthropometricMeasurements?>> GetAllMeasurements()
         {
-            throw new NotImplementedException();
+            List<AnthropometricMeasurements> results = await _dataContext.AnthropometricMeasurements
+                                                            .OrderBy(am => am.UnitMeasurements)
+                                                            .ToListAsync();
+            return results!;
         }
 
-        public Task<List<PaymentPlan?>> GetAllPlans()
+        public async Task<List<PaymentPlan?>> GetAllPlans()
         {
-            throw new NotImplementedException();
+            List<PaymentPlan> results = await _dataContext.PaymentPlans
+                                            .OrderBy(pp => pp.PayFrequency)
+                                            .ToListAsync();
+            return results!;
         }
 
-        public Task<AnthropometricMeasurements?> GetAnthropometricMeasurement(int Id)
+        public async Task<AnthropometricMeasurements?> GetAnthropometricMeasurement(int Id)
         {
-            throw new NotImplementedException();
+            AnthropometricMeasurements? result = await _dataContext.AnthropometricMeasurements
+                                                    .Where(am => am.Id == Id)
+                                                    .FirstOrDefaultAsync();
+            return result;
         }
 
-        public Task<Customer?> GetCustomer(int customerId)
+        public async Task<Customer?> GetCustomer(int customerId)
         {
-            throw new NotImplementedException();
+            Customer? result = await _dataContext.Customers
+                                .Include(c => c.Progress)
+                                .Include(c => c.Payment)
+                                .Where(c => c.IdNumber == customerId)
+                                .FirstOrDefaultAsync();
+            return result;
         }
 
-        public Task<Customer?> GetCustomerByEmail(string customerEmail)
+        public async Task<Customer?> GetCustomerByEmail(string customerEmail)
         {
-            throw new NotImplementedException();
+            Customer? result = await _dataContext.Customers
+                                .Include(c => c.Progress)
+                                .Include(c => c.Payment)
+                                .Where(c => c.Email == customerEmail)
+                                .FirstOrDefaultAsync();
+            return result;
         }
 
-        public Task<List<Customer?>> GetCustomersByRegisteredDate(DateTime dateSelected)
+        public async Task<List<Customer?>> GetCustomersByRegisteredDate(DateTime dateSelected)
         {
-            throw new NotImplementedException();
+            List<Customer> result = await _dataContext.Customers
+                                .Include(c => c.Progress)
+                                .Include(c => c.Payment)
+                                .Where(c => c.RegisterAt.Date == dateSelected.Date)
+                                .OrderBy(c => c.Name)
+                                .ToListAsync();
+            return result!;
         }
 
-        public Task<PaymentPlan?> GetPlan(int planId)
+        public async Task<PaymentPlan?> GetPlan(int planId)
         {
-            throw new NotImplementedException();
+            PaymentPlan? result = await _dataContext.PaymentPlans
+                                    .Where(pp => pp.Id == planId)
+                                    .FirstOrDefaultAsync();
+            return result;
         }
 
-        public Task<List<PaymentPlan?>> GetPlayByFrequency(string planFrequency)
+        public async Task<List<PaymentPlan?>> GetPlayByFrequency(string planFrequency)
         {
-            throw new NotImplementedException();
+            List<PaymentPlan> result = await _dataContext.PaymentPlans
+                                        .Where(pp => pp.PayFrequency.ToUpper() == planFrequency.ToUpper() )
+                                        .OrderBy(pp => pp.Name)
+                                        .ToListAsync();
+            return result!;
         }
 
-        public Task ModifyCustomerPaymentPlan(CustomerPayment paymentPlan)
+        public async Task ModifyCustomerPaymentPlan(CustomerPayment paymentPlan)
         {
-            throw new NotImplementedException();
+            _dataContext.CustomerPayments.Update(paymentPlan);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task ModifyCustomerProgress(CustomerProgress progress)
+        public async Task ModifyCustomerProgress(CustomerProgress progress)
         {
-            throw new NotImplementedException();
+            _dataContext.CustomerProgresses.Update(progress);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task ModifyPlan(PaymentPlan plan)
+        public async Task ModifyPlan(PaymentPlan plan)
         {
-            throw new NotImplementedException();
+            _dataContext.PaymentPlans.Update(plan);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task RegisterCustomer(Customer customer)
+        public async Task RegisterCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            _dataContext.Customers.Add(customer);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task RegisterCustomerProgress(CustomerProgress progress)
+        public async Task RegisterCustomerProgress(CustomerProgress progress)
         {
-            throw new NotImplementedException();
+            _dataContext.CustomerProgresses.Add(progress);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task UpdateCustomer(Customer customer)
+        public async Task UpdateCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            _dataContext.Customers.Add(customer);
+            await _dataContext.SaveChangesAsync();
         }
 
-        public Task UpdateMeasurement(AnthropometricMeasurements measurement)
+        public async Task UpdateMeasurement(AnthropometricMeasurements measurement)
         {
-            throw new NotImplementedException();
+            _dataContext.AnthropometricMeasurements.Update(measurement);
+            await _dataContext.SaveChangesAsync();
         }
     }
 }
