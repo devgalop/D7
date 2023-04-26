@@ -126,7 +126,7 @@ namespace distrito7.api.Data.Repositories
         public async Task<List<PaymentPlan?>> GetPlayByFrequency(string planFrequency)
         {
             List<PaymentPlan> result = await _dataContext.PaymentPlans
-                                        .Where(pp => pp.PayFrequency.ToUpper() == planFrequency.ToUpper() )
+                                        .Where(pp => pp.PayFrequency.ToUpper() == planFrequency.ToUpper())
                                         .OrderBy(pp => pp.Name)
                                         .ToListAsync();
             return result!;
@@ -172,6 +172,14 @@ namespace distrito7.api.Data.Repositories
         {
             _dataContext.AnthropometricMeasurements.Update(measurement);
             await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task<PaymentPlan?> GetPlanByName(string planName)
+        {
+            PaymentPlan? result = await _dataContext.PaymentPlans
+                                    .Where(pp => pp.Name.ToUpper() == planName.ToUpper())
+                                    .FirstOrDefaultAsync();
+            return result;
         }
     }
 }
