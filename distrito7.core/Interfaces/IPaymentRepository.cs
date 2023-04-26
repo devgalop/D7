@@ -14,6 +14,6 @@ namespace distrito7.core.Interfaces
         Task<PaymentPlan?> GetPlan(int planId);
         Task<PaymentPlan?> GetPlanByName(string planName);
         Task<List<PaymentPlan?>> GetAllPlans();
-        Task<List<PaymentPlan?>> GetPlayByFrequency(string planFrequency);
+        Task<List<PaymentPlan?>> GetPlansByFrequency(string planFrequency);
     }
 }

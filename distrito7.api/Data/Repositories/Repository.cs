@@ -123,7 +123,7 @@ namespace distrito7.api.Data.Repositories
             return result;
         }
 
-        public async Task<List<PaymentPlan?>> GetPlayByFrequency(string planFrequency)
+        public async Task<List<PaymentPlan?>> GetPlansByFrequency(string planFrequency)
         {
             List<PaymentPlan> result = await _dataContext.PaymentPlans
                                         .Where(pp => pp.PayFrequency.ToUpper() == planFrequency.ToUpper())
