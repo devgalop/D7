@@ -20,6 +20,8 @@ namespace distrito7.core.Profiles
             CreateMap<CustomerPayment, AddCustomerPayment>();
             CreateMap<AddPaymentPlan, PaymentPlan>();
             CreateMap<PaymentPlan, AddPaymentPlan>();
+            CreateMap<UpdatePaymentPlan, PaymentPlan>();
+            CreateMap<PaymentPlan, UpdatePaymentPlan>();
         }
     }
 }
