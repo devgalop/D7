@@ -14,7 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 DotEnv.Load();
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IMapperService, MapperService>();
+builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<IPaymentPlanService, PaymentPlanService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(options =>
