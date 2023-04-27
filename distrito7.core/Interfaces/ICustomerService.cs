@@ -10,7 +10,7 @@ namespace distrito7.core.Interfaces
     {
         Task<Response<SimpleCustomer>> RegisterCustomer(AddCustomer customer);
         Task<Response<SimpleCustomer>> ModifyCustomer(AddCustomer customer);
-        Task<Response<string>> DeleteCustomer(string customerEmail);
-        Task<Response<CompleteCustomer>> GetCustomer(string customerEmail);
+        Task<Response<string>> DeleteCustomer(string textEncrypted);
+        Task<Response<CompleteCustomer>> GetCustomer(string textEncrypted);
     }
 }

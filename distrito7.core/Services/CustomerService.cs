@@ -13,9 +13,11 @@ namespace distrito7.core.Services
     {
         private readonly IMapperService _mapper;
         private readonly IRepository _repository;
+        private readonly ISecurityService _security;
 
-        public CustomerService(IRepository repository, IMapperService mapper)
+        public CustomerService(IRepository repository, IMapperService mapper, ISecurityService security)
         {
+            _security = security;
             _repository = repository;
             _mapper = mapper;
         }
@@ -99,17 +101,18 @@ namespace distrito7.core.Services
             }
         }
 
-        public async Task<Response<string>> DeleteCustomer(string customerEmail)
+        public async Task<Response<string>> DeleteCustomer(string textEncrypted)
         {
             try
             {
                 Response<string> result = new Response<string>();
-                if (string.IsNullOrEmpty(customerEmail))
+                if (string.IsNullOrEmpty(textEncrypted))
                 {
                     result.IsSuccessful = false;
                     result.ErrorMessage = "Invalid email address. Please check it and try again.";
                     return result;
                 }
+                string customerEmail = await _security.Decrypt(textEncrypted);
                 Customer? customerFound = await _repository.GetCustomerByEmail(customerEmail);
                 if (customerFound == null)
                 {
@@ -132,17 +135,18 @@ namespace distrito7.core.Services
             }
         }
 
-        public async Task<Response<CompleteCustomer>> GetCustomer(string customerEmail)
+        public async Task<Response<CompleteCustomer>> GetCustomer(string textEncrypted)
         {
             try
             {
                 Response<CompleteCustomer> result = new Response<CompleteCustomer>();
-                if (string.IsNullOrEmpty(customerEmail))
+                if (string.IsNullOrEmpty(textEncrypted))
                 {
                     result.IsSuccessful = false;
                     result.ErrorMessage = "Invalid email address, please check it and try again";
                     return result;
                 }
+                string customerEmail = await _security.Decrypt(textEncrypted);
                 Customer? customerFound = await _repository.GetCustomerByEmail(customerEmail);
                 if (customerFound == null)
                 {

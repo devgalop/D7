@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using distrito7.core.Interfaces;
 using dotenv.net.Utilities;
 
+//https://code-maze.com/csharp-string-encryption-decryption/
 namespace distrito7.core.Services
 {
     public class SecurityService : ISecurityService
@@ -30,7 +31,7 @@ namespace distrito7.core.Services
             using CryptoStream cryptoStream = new(output, aes.CreateEncryptor(), CryptoStreamMode.Write);
             await cryptoStream.WriteAsync(Encoding.Unicode.GetBytes(clearText));
             await cryptoStream.FlushFinalBlockAsync();
-            return Encoding.Unicode.GetString(output.ToArray());
+            return Convert.ToBase64String(output.ToArray());
         }
 
         public async Task<string> Decrypt(string sencrypted)
@@ -38,7 +39,7 @@ namespace distrito7.core.Services
             using Aes aes = Aes.Create();
             aes.Key = DeriveKeyFromPassword(EnvReader.GetStringValue("SECRET_KEY"));
             aes.IV = IV;
-            byte[] encrypted = Encoding.Unicode.GetBytes(sencrypted);
+            byte[] encrypted = Convert.FromBase64String(sencrypted);
             using MemoryStream input = new(encrypted);
             using CryptoStream cryptoStream = new(input, aes.CreateDecryptor(), CryptoStreamMode.Read);
             using MemoryStream output = new();
