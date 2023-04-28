@@ -8,8 +8,9 @@ namespace distrito7.core.DAO
 {
     public class AddCustomer
     {
+        public int IdNumber { get; set; }
         public string Name { get; set; } = string.Empty;
-        [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "Please make sure you enter a valid email address")]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
         [Range(10, 80)]
         public int Age { get; set; }

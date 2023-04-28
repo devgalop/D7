@@ -10,9 +10,10 @@ namespace distrito7.core.Models
     public class Customer
     {
         [Key]
+        public int Id { get; set; }
         public int IdNumber { get; set; }
         public string Name { get; set; } = string.Empty;
-        [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "Please make sure you enter a valid email address")]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
         public int Age { get; set; }
         public string Cellphone { get; set; } = string.Empty;

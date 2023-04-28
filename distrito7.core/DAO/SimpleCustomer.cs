@@ -7,6 +7,7 @@ namespace distrito7.core.DAO
 {
     public class SimpleCustomer
     {
+        public int Id { get; set; }
         public int IdNumber { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

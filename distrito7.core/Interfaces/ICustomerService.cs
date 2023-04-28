@@ -12,5 +12,7 @@ namespace distrito7.core.Interfaces
         Task<Response<SimpleCustomer>> ModifyCustomer(AddCustomer customer);
         Task<Response<string>> DeleteCustomer(string textEncrypted);
         Task<Response<CompleteCustomer>> GetCustomer(string textEncrypted);
+        Task<Response<List<CompleteCustomer>>> GetCustomersByRegisterDate(SelectCustomerByDate model);
+        Task<Response<CompleteCustomer>> AssignPlanToCustomer(AddCustomerPayment plan);
     }
 }
